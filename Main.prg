@@ -24,22 +24,7 @@ Function main
 	' Stop Roboter when executed on abort
 	Trap Abort, Xqt FcStopRobot
 Fend
-Function fcMoveToHomePos
-	'Vakuum eingeschaltet?
-	If Oport(q_VacOn) = On Then
-		On q_xRoboterBusy
-		Jump Reject_Position /L LimZ SCA_Z_Limit
-		Wait Sw(i_xRejectBoxRdyForPart) = On
-		Off q_VacOn
-		On q_BlowOn, GRP_BlowTimeOn
-	EndIf
 
-	On q_xRoboterBusy
-	FcMotSlow()
-	Jump Home_Position /L LimZ SCA_Z_Limit
-	HomeSet Pls(1), Pls(2), Pls(3), Pls(4)
-	Off q_xRoboterBusy
-Fend
 Function Scheduler
 	
 SCHEDULER_MAIN:
@@ -62,12 +47,6 @@ SCHEDULER_MAIN:
 			Wait Sw(i_xStartInit) = Off
 		EndIf
 	
-		
-		' Auf Homeposition fahren
-'		If Not AtHome() Then
-	'		fcMoveToHomePos()
-	'	EndIf
-
 		' Job ausführen
 		If InW(i_wJobNr) > WAIT_FOR_JOB Then
 			' Status Busy schreiben
